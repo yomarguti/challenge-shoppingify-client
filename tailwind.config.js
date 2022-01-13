@@ -13,6 +13,9 @@ module.exports = {
         "light-gray": "#828282",
         "dark-gray": "#34333A",
       },
+      fontFamily: {
+        Quicksand: ["Quicksand", "sans-serif"],
+      },
     },
   },
   plugins: [],

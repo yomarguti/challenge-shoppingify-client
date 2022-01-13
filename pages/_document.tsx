@@ -9,8 +9,14 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
             rel="stylesheet"
           />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap"
+            rel="stylesheet"
+          />
         </Head>
-        <body>
+        <body className="font-Quicksand">
           <Main />
           <NextScript />
         </body>
