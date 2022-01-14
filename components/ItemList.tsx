@@ -18,11 +18,15 @@ const ItemList = () => {
   const { itemsByCategories, isLoading, isError } = useItemList();
 
   return (
-    <main className="flex flex-col w-full px-3 py-8 space-y-6 bg-lightbg-gray">
-      {itemsByCategories &&
-        itemsByCategories.map(({ name, items, id }) => {
-          return <Category name={name} items={items} key={id} />;
-        })}
+    <main className="flex flex-col w-full px-3 py-8 space-y-6 overflow-scroll bg-lightbg-gray">
+      {isLoading && (
+        <div>
+          <h4>Loading...</h4> <span className="material-icon">cached</span>
+        </div>
+      )}
+      {itemsByCategories?.map(({ name, items, id }) => {
+        return <Category name={name} items={items} key={id} />;
+      })}
     </main>
   );
 };
@@ -40,10 +44,11 @@ const Category = ({ name, items }: CategoryProps) => {
   );
 };
 
-const ItemElement = (props: ItemElementProps) => {
+const ItemElement = ({ title }: ItemElementProps) => {
   return (
-    <li className="px-3 py-3 tracking-tight bg-white shadow-md rounded-xl">
-      {props.title + "    + "}
+    <li className="flex flex-row justify-between px-3 py-3 tracking-tight bg-white shadow-md rounded-xl">
+      <p>{title}</p>
+      <span className="material-icons text-light-gray">add</span>
     </li>
   );
 };

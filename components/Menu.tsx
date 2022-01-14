@@ -6,14 +6,23 @@ const Menu = () => {
       </div>
       <nav className="w-full text-icons-gray">
         <ul className="w-full space-y-6">
-          <li className="grid w-full py-4 border-l-4 border-primary place-items-center">
-            <span className="material-icons">list</span>
+          <li className="w-full pr-3 my-4">
+            <div className="flex flex-row justify-between h-full py-2">
+              <span className="border-2 rounded-r-xl border-primary"></span>
+              <span className="py-2 material-icons">format_list_bulleted</span>
+            </div>
           </li>
-          <li className="grid w-full py-4 border-l-4 border-white place-items-center">
-            <span className="material-icons">replay</span>
+          <li className="w-full pr-3 my-4">
+            <div className="flex flex-row justify-between h-full py-2">
+              <span className="border-2 border-white rounded-r-xl"></span>
+              <span className="py-2 material-icons">replay</span>
+            </div>
           </li>
-          <li className="grid w-full py-4 border-l-4 border-white place-items-center">
-            <span className="material-icons">insert_chart_outlined</span>
+          <li className="w-full pr-3 my-4">
+            <div className="flex flex-row justify-between h-full py-2">
+              <span className="border-2 border-white rounded-r-xl"></span>
+              <span className="py-2 material-icons">insert_chart_outlined</span>
+            </div>
           </li>
         </ul>
       </nav>
