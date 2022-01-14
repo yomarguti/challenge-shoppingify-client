@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Header from "../components/Header";
 import ItemList from "../components/ItemList";
 import Menu from "../components/Menu";
 
@@ -10,7 +11,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Menu />
-      <ItemList />
+      <div className="w-full px-3 overflow-y-auto bg-lightbg-gray md:px-10">
+        <Header />
+        <ItemList />
+      </div>
     </div>
   );
 }

@@ -18,7 +18,7 @@ const ItemList = () => {
   const { itemsByCategories, isLoading, isError } = useItemList();
 
   return (
-    <main className="flex flex-col w-full px-3 py-8 space-y-6 overflow-scroll bg-lightbg-gray">
+    <div className="flex flex-col w-full py-8 space-y-6 ">
       {isLoading && (
         <div>
           <h4>Loading...</h4> <span className="material-icon">cached</span>
@@ -27,7 +27,7 @@ const ItemList = () => {
       {itemsByCategories?.map(({ name, items, id }) => {
         return <Category name={name} items={items} key={id} />;
       })}
-    </main>
+    </div>
   );
 };
 
@@ -35,7 +35,7 @@ const Category = ({ name, items }: CategoryProps) => {
   return (
     <section>
       <h4 className="text-lg font-bold tracking-wide">{name}</h4>
-      <ul className="grid grid-cols-2 pt-5 gap-x-2 gap-y-4">
+      <ul className="grid grid-cols-2 pt-5 md:grid-cols-4 gap-x-2 gap-y-4">
         {items.map((it) => (
           <ItemElement title={it.title} key={it.id} />
         ))}
