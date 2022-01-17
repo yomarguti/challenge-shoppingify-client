@@ -97,7 +97,7 @@ const ShoppingList = (): JSX.Element => {
             placeholder="Enter a name"
             className="py-4 pl-3 text-xs focus:outline-none"
           />
-          <button className="px-4 py-4 text-sm font-bold text-white rounded-lg bg-primary">
+          <button className="px-4 py-4 text-sm font-bold text-white rounded-md rounded-r-sm bg-primary">
             Save
           </button>
         </div>
