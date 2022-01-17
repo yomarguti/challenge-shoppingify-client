@@ -35,7 +35,7 @@ const Category = ({ name, items }: CategoryProps) => {
   return (
     <section>
       <h4 className="text-lg font-bold tracking-wide">{name}</h4>
-      <ul className="grid grid-cols-2 pt-5 md:grid-cols-4 gap-x-2 gap-y-4">
+      <ul className="grid items-start grid-cols-2 pt-5 md:grid-cols-4 gap-x-2 gap-y-4">
         {items.map((it) => (
           <ItemElement title={it.title} key={it.id} />
         ))}
