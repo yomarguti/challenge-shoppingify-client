@@ -25,10 +25,10 @@ export default function Layout({ children }: LayoutProps) {
     return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
 
+  let hide: boolean = isMobile && isOpenShopLst;
+
   const childrenWithExtraProp = React.Children.map(children, (child) =>
-    React.cloneElement(child as React.ReactElement<any>, {
-      hide: isMobile && isOpenShopLst,
-    })
+    React.cloneElement(child as React.ReactElement<any>, { hide })
   );
 
   return (
