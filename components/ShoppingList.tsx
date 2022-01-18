@@ -63,7 +63,7 @@ interface ItemElementProps {
 
 const ShoppingList = (): JSX.Element => {
   return (
-    <aside className="relative flex-col hidden py-8 w-96 bg-primary-light lg:flex">
+    <aside className="relative flex-col w-full py-8 md:w-96 bg-primary-light lg:flex">
       <div className="relative flex flex-row justify-end px-2 py-3 mx-5 rounded-2xl bg-violet">
         <div className="absolute -top-3 left-3 w-14">
           <img src="/source.svg" alt="Bottle" />
