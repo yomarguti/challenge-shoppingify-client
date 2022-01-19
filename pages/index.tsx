@@ -2,7 +2,7 @@ import Head from "next/head";
 import ItemListHome from "../components/ItemListHome";
 import Layout from "../components/Layout";
 
-export default function Home() {
+export default function Home(): JSX.Element {
   return (
     <>
       <Head>

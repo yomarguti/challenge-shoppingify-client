@@ -1,17 +1,9 @@
 import Header from "./Header";
 import ItemList from "./ItemList";
 
-interface ItemListHomeProps {
-  hide?: boolean;
-}
-
-export default function ItemListHome({ hide }: ItemListHomeProps) {
+export default function ItemListHome() {
   return (
-    <div
-      className={`${
-        hide && "hidden"
-      } w-full px-3 overflow-y-auto bg-lightbg-gray md:px-10`}
-    >
+    <div className="w-full h-full px-3 overflow-y-auto bg-lightbg-gray md:px-10">
       <Header />
       <ItemList />
     </div>

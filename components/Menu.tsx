@@ -5,7 +5,7 @@ interface MenuProps {
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const Menu = ({ toggle }: MenuProps) => {
+const Menu = ({ toggle }: MenuProps): JSX.Element => {
   const router = useRouter();
 
   const isActive = (route: string): string => {
