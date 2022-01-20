@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import { Item } from "../app";
+import { AppContext } from "../context/context";
+import { Actions } from "../context/reducers";
 
 const dummyShList = [
   {
@@ -62,6 +65,8 @@ interface ItemElementProps {
 }
 
 const ShoppingList = (): JSX.Element => {
+  const { dispatch } = useContext(AppContext);
+
   return (
     <aside className="relative flex-col w-full py-8 md:w-96 bg-primary-light lg:flex">
       <div className="relative flex flex-row justify-end px-2 py-3 mx-5 rounded-2xl bg-violet">
@@ -72,7 +77,10 @@ const ShoppingList = (): JSX.Element => {
           <p className="text-sm leading-none text-white">
             Didn't find what you need?
           </p>
-          <button className="px-3 py-1 mt-3 text-xs bg-white rounded-md">
+          <button
+            onClick={() => dispatch({ type: Actions.ShowNewItem })}
+            className="px-3 py-1 mt-3 text-xs bg-white rounded-md"
+          >
             Add item
           </button>
         </div>

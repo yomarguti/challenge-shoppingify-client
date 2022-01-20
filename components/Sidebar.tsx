@@ -4,15 +4,13 @@ import ShoppingList from "./ShoppingList";
 
 interface SidebarProps {
   isMobile: boolean;
-  showShopList: boolean;
+
   activeComponent: ActiveSidebar | null;
 }
 
-export default function Sidebar({
-  isMobile,
-  showShopList,
-  activeComponent,
-}: SidebarProps): JSX.Element {
+export default function Sidebar(props: SidebarProps): JSX.Element {
+  const { isMobile, activeComponent } = props;
+
   const sidebarComponents = {
     [ActiveSidebar.NEW_ITEM]: <NewItem />,
     [ActiveSidebar.SHOPPING_LIST]: <ShoppingList />,
@@ -27,7 +25,7 @@ export default function Sidebar({
     renderComponent = <ShoppingList />;
   }
 
-  if (isMobile && activeComponent !== null) {
+  if (activeComponent !== null) {
     renderComponent = sidebarComponents[activeComponent];
   }
 

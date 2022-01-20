@@ -1,6 +1,6 @@
 import { ActiveSidebar, AppState } from "./context";
 
-export enum Types {
+export enum Actions {
   ShowShoppingList = "SHOW_SHOPPING_LIST",
   ShowNewItem = "SHOW_NEW_ITEM",
   SetIsMobile = "SET_IS_MOBILE",
@@ -13,9 +13,9 @@ type ActionMap<M extends { [index: string]: any }> = {
 };
 
 type SidebarPayload = {
-  [Types.SetIsMobile]: boolean;
-  [Types.ShowShoppingList]: undefined;
-  [Types.ShowNewItem]: undefined;
+  [Actions.SetIsMobile]: boolean;
+  [Actions.ShowShoppingList]: undefined;
+  [Actions.ShowNewItem]: undefined;
 };
 
 export type SidebarActions =
@@ -26,14 +26,20 @@ export const sidebarReducer = (
   action: SidebarActions
 ): AppState => {
   switch (action.type) {
-    case Types.SetIsMobile:
+    case Actions.SetIsMobile:
       return { ...state, isMobile: action.payload };
-    case Types.ShowShoppingList:
+    case Actions.ShowShoppingList: {
       const active =
         state.active === ActiveSidebar.SHOPPING_LIST
           ? null
           : ActiveSidebar.SHOPPING_LIST;
       return { ...state, active };
+    }
+    case Actions.ShowNewItem: {
+      const active =
+        state.active === ActiveSidebar.NEW_ITEM ? null : ActiveSidebar.NEW_ITEM;
+      return { ...state, active };
+    }
     default:
       return state;
   }
