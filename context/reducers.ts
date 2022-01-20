@@ -4,6 +4,7 @@ export enum Actions {
   ShowShoppingList = "SHOW_SHOPPING_LIST",
   ShowNewItem = "SHOW_NEW_ITEM",
   SetIsMobile = "SET_IS_MOBILE",
+  DismissAll = "DISMISS_ALL",
 }
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -16,6 +17,7 @@ type SidebarPayload = {
   [Actions.SetIsMobile]: boolean;
   [Actions.ShowShoppingList]: undefined;
   [Actions.ShowNewItem]: undefined;
+  [Actions.DismissAll]: undefined;
 };
 
 export type SidebarActions =
@@ -26,8 +28,9 @@ export const sidebarReducer = (
   action: SidebarActions
 ): AppState => {
   switch (action.type) {
-    case Actions.SetIsMobile:
+    case Actions.SetIsMobile: {
       return { ...state, isMobile: action.payload };
+    }
     case Actions.ShowShoppingList: {
       const active =
         state.active === ActiveSidebar.SHOPPING_LIST
@@ -39,6 +42,9 @@ export const sidebarReducer = (
       const active =
         state.active === ActiveSidebar.NEW_ITEM ? null : ActiveSidebar.NEW_ITEM;
       return { ...state, active };
+    }
+    case Actions.DismissAll: {
+      return { ...state, active: null };
     }
     default:
       return state;

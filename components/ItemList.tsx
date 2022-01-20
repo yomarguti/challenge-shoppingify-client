@@ -1,4 +1,5 @@
-import useItemList from "../hooks/useItemList";
+import { Category } from "../app";
+import useFetchData from "../hooks/useFetchData";
 
 interface Item {
   id: number;
@@ -14,8 +15,12 @@ interface ItemElementProps {
   title: string;
 }
 
-const ItemList = () => {
-  const { itemsByCategories, isLoading, isError } = useItemList();
+const ItemList = (): JSX.Element => {
+  const {
+    data: itemsByCategories,
+    isLoading,
+    isError,
+  } = useFetchData<Category[]>("/items");
 
   return (
     <div className="flex flex-col w-full py-8 space-y-6 ">

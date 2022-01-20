@@ -1,4 +1,10 @@
+import { useContext } from "react";
+import { AppContext } from "../context/context";
+import { Actions } from "../context/reducers";
+
 export default function NewItem(): JSX.Element {
+  const { dispatch } = useContext(AppContext);
+
   return (
     <aside className="relative flex-col w-full px-5 pt-6 pb-5 md:w-96 lg:flex bg-lightbg-gray">
       <h4 className="text-2xl font-bold">Add a new item</h4>
@@ -55,7 +61,12 @@ export default function NewItem(): JSX.Element {
           </div>
         </div>
         <div className="self-center mt-3">
-          <button className="mr-8 font-bold">cancel</button>
+          <button
+            onClick={() => dispatch({ type: Actions.DismissAll })}
+            className="mr-8 font-bold"
+          >
+            cancel
+          </button>
           <button className="px-5 py-4 font-bold text-white bg-primary rounded-xl">
             Save
           </button>
