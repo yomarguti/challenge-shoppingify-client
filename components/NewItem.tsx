@@ -1,27 +1,100 @@
-import { useContext } from "react";
-import { AppContext } from "../context/context";
+import React, { useContext, useState } from "react";
 import { Actions } from "../context/reducers";
+import { Category, Item } from "../app";
+import ComboBox from "./ComboBox";
+import { BASE_URL } from "../constants";
+import { AppContext } from "../context/context";
+import axios from "axios";
+import { useSWRConfig } from "swr";
+
+interface IState {
+  name: string;
+  note: string;
+  image: string;
+  category: {
+    name: string;
+    id: number | null;
+  };
+}
+
+const initialState: IState = {
+  name: "",
+  note: "",
+  image: "",
+  category: {
+    name: "",
+    id: null,
+  },
+};
 
 export default function NewItem(): JSX.Element {
   const { dispatch } = useContext(AppContext);
+  const [state, setState] = useState<IState>(initialState);
+  const { mutate } = useSWRConfig();
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
+    setState({ ...state, [e.target.name]: e.target.value } as {
+      [K in keyof IState]: IState[K];
+    });
+  };
+
+  const setCategory = (
+    e: React.ChangeEvent<HTMLInputElement> | null,
+    category?: Category
+  ): void => {
+    if (e) {
+      setState({ ...state, category: { name: e.target.value, id: null } });
+      return;
+    }
+    if (category) {
+      setState({
+        ...state,
+        category,
+      });
+    }
+  };
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    const category = state.category.id
+      ? state.category.id
+      : state.category.name;
+
+    await axios.post<Item>(`${BASE_URL}/items`, { ...state, category });
+
+    mutate(`${BASE_URL}/items`);
+    setState({ ...initialState });
+  };
 
   return (
     <aside className="relative flex-col w-full px-5 pt-6 pb-5 md:w-96 lg:flex bg-lightbg-gray">
       <h4 className="text-2xl font-bold">Add a new item</h4>
-      <form className="flex flex-col justify-between h-full pt-6">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col justify-between h-full pt-6"
+      >
         <div>
           <div className="flex flex-col pt-2 focus-within:text-primary">
             <label htmlFor="name">Name</label>
             <input
+              value={state.name}
+              onChange={handleChange}
               type="text"
               name="name"
               placeholder="Enter a name"
+              required
               className="w-full p-3 mt-1 bg-transparent border-2 border-gray-200 focus:border-primary rounded-xl focus:outline-none focus:text-black"
             />
           </div>
           <div className="flex flex-col pt-2 focus-within:text-primary">
             <label htmlFor="note">Note (optional)</label>
             <textarea
+              value={state.note}
+              onChange={handleChange}
               name="note"
               placeholder="Enter a note"
               rows={4}
@@ -31,34 +104,19 @@ export default function NewItem(): JSX.Element {
           <div className="flex flex-col pt-2 focus-within:text-primary">
             <label htmlFor="image">Image (optional)</label>
             <input
-              type="text"
+              type="url"
               name="image"
+              value={state.image}
+              onChange={handleChange}
               placeholder="Enter a url"
               className="w-full p-3 mt-1 bg-transparent border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none focus:text-black"
             />
           </div>
-          <div className="flex flex-col">
-            <div className="flex flex-col pt-2 focus-within:text-primary">
-              <label htmlFor="category">Category</label>
-              <input
-                type="text"
-                name="category"
-                placeholder="Enter a category"
-                className="w-full p-3 mt-1 bg-transparent border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none focus:text-black"
-              />
-            </div>
-            <ul className="flex flex-col w-full p-1 mt-2 bg-white border border-gray-200 rounded-xl">
-              <li className="py-2 pl-4 m-1 rounded-lg even:text-black even:bg-gray-400 odd:text-gray-500 even:font-bold hover:text-primary">
-                Fruit and vegetables
-              </li>
-              <li className="py-2 pl-4 m-1 rounded-lg even:text-black even:bg-gray-100 odd:text-gray-500 even:font-bold hover:text-primary">
-                Meat and fish
-              </li>
-              <li className="py-2 pl-4 m-1 rounded-lg even:text-black even:bg-gray-100 odd:text-gray-500 even:font-bold hover:text-primary">
-                Beverages
-              </li>
-            </ul>
-          </div>
+          <ComboBox
+            title="Category"
+            value={state.category.name}
+            setCategory={setCategory}
+          />
         </div>
         <div className="self-center mt-3">
           <button
@@ -67,7 +125,10 @@ export default function NewItem(): JSX.Element {
           >
             cancel
           </button>
-          <button className="px-5 py-4 font-bold text-white bg-primary rounded-xl">
+          <button
+            type="submit"
+            className="px-5 py-4 font-bold text-white bg-primary rounded-xl"
+          >
             Save
           </button>
         </div>

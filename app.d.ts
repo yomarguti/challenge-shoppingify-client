@@ -1,8 +1,8 @@
 export interface Item {
   id: number;
-  title: string;
-  price: number;
-  stock: number;
+  name: string;
+  note?: string;
+  image?: string;
   categoryId: number;
   createdAt: string;
   updatedAt: string;
@@ -11,7 +11,10 @@ export interface Item {
 export interface Category {
   id: number;
   name: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CategoryWithItems extends Category {
   items: Item[];
-  createdAt: string;
-  updatedAt: string;
 }

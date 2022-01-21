@@ -1,10 +1,5 @@
-import { Category } from "../app";
+import { CategoryWithItems, Item } from "../app";
 import useFetchData from "../hooks/useFetchData";
-
-interface Item {
-  id: number;
-  title: string;
-}
 
 interface CategoryProps {
   name: string;
@@ -12,7 +7,7 @@ interface CategoryProps {
 }
 
 interface ItemElementProps {
-  title: string;
+  name: string;
 }
 
 const ItemList = (): JSX.Element => {
@@ -20,7 +15,7 @@ const ItemList = (): JSX.Element => {
     data: itemsByCategories,
     isLoading,
     isError,
-  } = useFetchData<Category[]>("/items");
+  } = useFetchData<CategoryWithItems[]>("/items");
 
   return (
     <div className="flex flex-col w-full py-8 space-y-6 ">
@@ -29,9 +24,10 @@ const ItemList = (): JSX.Element => {
           <h4>Loading...</h4> <span className="material-icon">cached</span>
         </div>
       )}
-      {itemsByCategories?.map(({ name, items, id }) => {
-        return <Category name={name} items={items} key={id} />;
-      })}
+      {itemsByCategories &&
+        itemsByCategories.map(({ name, items, id }) => {
+          return <Category name={name} items={items} key={id} />;
+        })}
     </div>
   );
 };
@@ -42,17 +38,17 @@ const Category = ({ name, items }: CategoryProps) => {
       <h4 className="text-lg font-bold tracking-wide">{name}</h4>
       <ul className="grid items-start grid-cols-2 pt-5 md:grid-cols-4 gap-x-2 gap-y-4">
         {items.map((it) => (
-          <ItemElement title={it.title} key={it.id} />
+          <ItemElement name={it.name} key={it.id} />
         ))}
       </ul>
     </section>
   );
 };
 
-const ItemElement = ({ title }: ItemElementProps) => {
+const ItemElement = ({ name }: ItemElementProps) => {
   return (
     <li className="flex flex-row justify-between px-3 py-3 tracking-tight bg-white shadow-md rounded-xl">
-      <p>{title}</p>
+      <p>{name}</p>
       <span className="material-icons text-light-gray">add</span>
     </li>
   );
