@@ -68,7 +68,7 @@ const ShoppingList = (): JSX.Element => {
   const { dispatch } = useContext(AppContext);
 
   return (
-    <aside className="relative flex-col w-full py-8 md:w-96 bg-primary-light lg:flex">
+    <div className="relative flex-col w-full h-full py-5 bg-primary-light">
       <div className="relative flex flex-row justify-end px-2 py-3 mx-5 rounded-2xl bg-violet">
         <div className="absolute -top-3 left-3 w-14">
           <img src="/source.svg" alt="Bottle" />
@@ -110,7 +110,7 @@ const ShoppingList = (): JSX.Element => {
           </button>
         </div>
       </div>
-    </aside>
+    </div>
   );
 };
 

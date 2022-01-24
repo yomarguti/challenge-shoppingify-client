@@ -12,7 +12,9 @@ const MOBILE = 640;
 
 export default function Layout({ children }: LayoutProps) {
   const {
-    state: { isMobile, active },
+    state: {
+      sidebarState: { isMobile, active },
+    },
     dispatch,
   } = useContext(AppContext);
 

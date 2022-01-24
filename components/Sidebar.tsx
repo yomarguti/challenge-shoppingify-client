@@ -1,10 +1,10 @@
 import { ActiveSidebar } from "../context/context";
+import { ItemDetail } from "./ItemDetail";
 import NewItem from "./NewItem";
 import ShoppingList from "./ShoppingList";
 
 interface SidebarProps {
   isMobile: boolean;
-
   activeComponent: ActiveSidebar | null;
 }
 
@@ -14,20 +14,21 @@ export default function Sidebar(props: SidebarProps): JSX.Element {
   const sidebarComponents = {
     [ActiveSidebar.NEW_ITEM]: <NewItem />,
     [ActiveSidebar.SHOPPING_LIST]: <ShoppingList />,
+    [ActiveSidebar.ITEM_DETAILS]: <ItemDetail />,
   };
 
-  let renderComponent = <></>;
+  let activeSidebar = <></>;
 
   if (
     (!isMobile && activeComponent === null) ||
     activeComponent === ActiveSidebar.SHOPPING_LIST
   ) {
-    renderComponent = <ShoppingList />;
+    activeSidebar = <ShoppingList />;
   }
 
   if (activeComponent !== null) {
-    renderComponent = sidebarComponents[activeComponent];
+    activeSidebar = sidebarComponents[activeComponent];
   }
 
-  return renderComponent;
+  return <aside className="w-full md:w-96">{activeSidebar}</aside>;
 }

@@ -71,7 +71,7 @@ export default function NewItem(): JSX.Element {
   };
 
   return (
-    <aside className="relative flex-col w-full px-5 pt-6 pb-5 md:w-96 lg:flex bg-lightbg-gray">
+    <div className="flex-col w-full h-full p-5 bg-lightbg-gray">
       <h4 className="text-2xl font-bold">Add a new item</h4>
       <form
         onSubmit={handleSubmit}
@@ -118,7 +118,7 @@ export default function NewItem(): JSX.Element {
             setCategory={setCategory}
           />
         </div>
-        <div className="self-center mt-3">
+        <div className="self-center my-3">
           <button
             onClick={() => dispatch({ type: Actions.DismissAll })}
             className="mr-8 font-bold"
@@ -133,6 +133,6 @@ export default function NewItem(): JSX.Element {
           </button>
         </div>
       </form>
-    </aside>
+    </div>
   );
 }

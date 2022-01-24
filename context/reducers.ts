@@ -1,10 +1,13 @@
-import { ActiveSidebar, AppState } from "./context";
+import { Item } from "../app";
+import { ActiveSidebar, SidebarState } from "./context";
 
 export enum Actions {
   ShowShoppingList = "SHOW_SHOPPING_LIST",
   ShowNewItem = "SHOW_NEW_ITEM",
+  ShowItemDetails = "SHOW_ITEM_DETAILS",
   SetIsMobile = "SET_IS_MOBILE",
   DismissAll = "DISMISS_ALL",
+  AddToShoppingList = "ADD_TO_SHOPPING_LIST",
 }
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -17,6 +20,7 @@ type SidebarPayload = {
   [Actions.SetIsMobile]: boolean;
   [Actions.ShowShoppingList]: undefined;
   [Actions.ShowNewItem]: undefined;
+  [Actions.ShowItemDetails]: Item;
   [Actions.DismissAll]: undefined;
 };
 
@@ -24,9 +28,9 @@ export type SidebarActions =
   ActionMap<SidebarPayload>[keyof ActionMap<SidebarPayload>];
 
 export const sidebarReducer = (
-  state: AppState,
-  action: SidebarActions
-): AppState => {
+  state: SidebarState,
+  action: SidebarActions | ShoppingListActions
+): SidebarState => {
   switch (action.type) {
     case Actions.SetIsMobile: {
       return { ...state, isMobile: action.payload };
@@ -43,8 +47,35 @@ export const sidebarReducer = (
         state.active === ActiveSidebar.NEW_ITEM ? null : ActiveSidebar.NEW_ITEM;
       return { ...state, active };
     }
+    case Actions.ShowItemDetails: {
+      return {
+        ...state,
+        itemDetails: action.payload,
+        active: ActiveSidebar.ITEM_DETAILS,
+      };
+    }
     case Actions.DismissAll: {
       return { ...state, active: null };
+    }
+    default:
+      return state;
+  }
+};
+
+type ShoppingListPayload = {
+  [Actions.AddToShoppingList]: Item;
+};
+
+export type ShoppingListActions =
+  ActionMap<ShoppingListPayload>[keyof ActionMap<ShoppingListPayload>];
+
+export const shoppingListReducer = (
+  state: Item[],
+  action: ShoppingListActions | SidebarActions
+): Item[] => {
+  switch (action.type) {
+    case Actions.AddToShoppingList: {
+      return [...state, action.payload];
     }
     default:
       return state;

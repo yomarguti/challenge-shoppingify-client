@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import { CategoryWithItems, Item } from "../app";
+import { AppContext } from "../context/context";
+import { Actions } from "../context/reducers";
 import useFetchData from "../hooks/useFetchData";
 
 interface CategoryProps {
@@ -7,7 +10,7 @@ interface CategoryProps {
 }
 
 interface ItemElementProps {
-  name: string;
+  itemData: Item;
 }
 
 const ItemList = (): JSX.Element => {
@@ -37,18 +40,25 @@ const Category = ({ name, items }: CategoryProps) => {
     <section>
       <h4 className="text-lg font-bold tracking-wide">{name}</h4>
       <ul className="grid items-start grid-cols-2 pt-5 md:grid-cols-4 gap-x-2 gap-y-4">
-        {items.map((it) => (
-          <ItemElement name={it.name} key={it.id} />
-        ))}
+        {items.map((it) => {
+          it.categoryName = name;
+          return <ItemElement itemData={it} key={it.id} />;
+        })}
       </ul>
     </section>
   );
 };
 
-const ItemElement = ({ name }: ItemElementProps) => {
+const ItemElement = ({ itemData }: ItemElementProps) => {
+  const { dispatch } = useContext(AppContext);
   return (
-    <li className="flex flex-row justify-between px-3 py-3 tracking-tight bg-white shadow-md rounded-xl">
-      <p>{name}</p>
+    <li
+      onClick={() =>
+        dispatch({ type: Actions.ShowItemDetails, payload: itemData })
+      }
+      className="flex flex-row justify-between px-3 py-3 tracking-tight bg-white shadow-md cursor-pointer rounded-xl"
+    >
+      <p>{itemData.name}</p>
       <span className="material-icons text-light-gray">add</span>
     </li>
   );

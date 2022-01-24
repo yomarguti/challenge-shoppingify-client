@@ -4,6 +4,7 @@ export interface Item {
   note?: string;
   image?: string;
   categoryId: number;
+  categoryName: string;
   createdAt: string;
   updatedAt: string;
 }
