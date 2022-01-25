@@ -1,5 +1,5 @@
 import { createContext, Dispatch, useReducer } from "react";
-import { Item } from "../app";
+import { Item, ShoplistItem } from "../app";
 import {
   ShoppingListActions,
   shoppingListReducer,
@@ -15,7 +15,7 @@ export interface SidebarState {
 
 export interface AppState {
   sidebarState: SidebarState;
-  shoppingList: Item[];
+  shoppingList: ShoplistItem[];
 }
 
 export enum ActiveSidebar {

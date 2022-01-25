@@ -1,4 +1,4 @@
-import { Item } from "../app";
+import { Item, ShoplistItem } from "../app";
 import { ActiveSidebar, SidebarState } from "./context";
 
 export enum Actions {
@@ -70,12 +70,24 @@ export type ShoppingListActions =
   ActionMap<ShoppingListPayload>[keyof ActionMap<ShoppingListPayload>];
 
 export const shoppingListReducer = (
-  state: Item[],
+  state: ShoplistItem[],
   action: ShoppingListActions | SidebarActions
-): Item[] => {
+): ShoplistItem[] => {
   switch (action.type) {
     case Actions.AddToShoppingList: {
-      return [...state, action.payload];
+      console.log(action.payload);
+      console.log(state);
+      const item = state.find((it) => it.id === action.payload.id);
+      if (item) {
+        return state.map((it) => {
+          if (it.id !== action.payload.id) {
+            return it;
+          }
+          return { ...it, pieces: it.pieces + 1 };
+        });
+      }
+
+      return [...state, { ...action.payload, pieces: 1 }];
     }
     default:
       return state;

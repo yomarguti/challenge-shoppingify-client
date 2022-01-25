@@ -9,6 +9,10 @@ export interface Item {
   updatedAt: string;
 }
 
+export interface ShoplistItem extends Item {
+  pieces: number;
+}
+
 export interface Category {
   id: number;
   name: string;
@@ -18,4 +22,8 @@ export interface Category {
 
 export interface CategoryWithItems extends Category {
   items: Item[];
+}
+
+export interface CategoryWithShopItems extends Category {
+  items: ShoplistItem[];
 }

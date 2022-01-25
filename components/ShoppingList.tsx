@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Item } from "../app";
+import { Item, ShoplistItem } from "../app";
 import { AppContext } from "../context/context";
 import { Actions } from "../context/reducers";
 
@@ -56,7 +56,7 @@ interface ItemInShoppingList extends Partial<Item> {
 
 interface CategoryProps {
   name: string;
-  items: ItemInShoppingList[];
+  items: ShoplistItem[];
 }
 
 interface ItemElementProps {
@@ -65,10 +65,19 @@ interface ItemElementProps {
 }
 
 const ShoppingList = (): JSX.Element => {
-  const { dispatch } = useContext(AppContext);
+  const {
+    dispatch,
+    state: { shoppingList },
+  } = useContext(AppContext);
+
+  const itemListByCategories = shoppingList.reduce((acc, current) => {
+    const value = current["categoryName"];
+    acc[value] = (acc[value] || []).concat(current);
+    return acc;
+  }, {} as Record<string, ShoplistItem[]>);
 
   return (
-    <div className="relative flex-col w-full h-full py-5 bg-primary-light">
+    <div className="relative flex flex-col w-full h-full py-5 bg-primary-light">
       <div className="relative flex flex-row justify-end px-2 py-3 mx-5 rounded-2xl bg-violet">
         <div className="absolute -top-3 left-3 w-14">
           <img src="/source.svg" alt="Bottle" />
@@ -86,19 +95,30 @@ const ShoppingList = (): JSX.Element => {
         </div>
       </div>
 
-      <div className="px-5 pt-6 pb-16 overflow-y-auto">
+      <div className="flex-1 px-5 pt-6 pb-16 overflow-y-auto">
         <div className="flex flex-row justify-between">
           <h4 className="text-xl font-bold">Shopping list</h4>
           <span className="text-lg material-icons">edit</span>
         </div>
         <div>
-          {dummyShList.map(({ id, name, items }) => {
-            return <Category name={name} items={items} key={id} />;
-          })}
+          {shoppingList.length === 0 ? (
+            <h1>Empty list</h1>
+          ) : (
+            Object.keys(itemListByCategories).map((categoryLabel) => {
+              const items = itemListByCategories[categoryLabel];
+              return (
+                <Category
+                  name={categoryLabel}
+                  items={items}
+                  key={categoryLabel}
+                />
+              );
+            })
+          )}
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-5 bg-white">
+      <div className="absolute bottom-0 left-0 right-0 px-5 py-4 bg-white">
         <div className="flex flex-row items-center justify-between border-2 rounded-lg border-primary">
           <input
             type="text"
@@ -116,11 +136,11 @@ const ShoppingList = (): JSX.Element => {
 
 const Category = ({ name, items }: CategoryProps) => {
   return (
-    <div className="flex flex-col pt-8">
+    <div className="flex flex-col pt-6">
       <h5 className="text-sm text-light-gray">{name}</h5>
       <ul>
-        {items.map(({ id, title, quantity }) => (
-          <ItemElement title={title} quantity={quantity} key={id} />
+        {items.map(({ id, name, pieces }) => (
+          <ItemElement title={name} quantity={pieces} key={id} />
         ))}
       </ul>
     </div>
@@ -129,7 +149,7 @@ const Category = ({ name, items }: CategoryProps) => {
 
 const ItemElement = ({ title, quantity }: ItemElementProps) => {
   return (
-    <li className="flex flex-row items-center justify-between py-3 pr-3 tracking-tight">
+    <li className="flex flex-row items-center justify-between py-2 pr-3 tracking-tight">
       <p className="text-sm font-bold">{title}</p>
       <span className="px-3 py-1 text-xs border-2 rounded-3xl text-primary border-primary">
         {quantity} pcs

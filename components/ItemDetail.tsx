@@ -29,8 +29,10 @@ export function ItemDetail(): JSX.Element {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    dispatch({ type: Actions.AddToShoppingList, payload: itemDetails });
-    dispatch({ type: Actions.DismissAll });
+    dispatch({
+      type: Actions.AddToShoppingList,
+      payload: { ...itemDetails },
+    });
   };
 
   return (
