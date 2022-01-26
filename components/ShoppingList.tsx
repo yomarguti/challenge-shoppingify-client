@@ -88,13 +88,21 @@ const ShoppingList = (): JSX.Element => {
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 px-5 py-4 bg-white">
-        <div className="flex flex-row items-center justify-between border-2 rounded-lg border-primary">
+        <div
+          className={`${
+            isShopListEmpty ? "border-nice-gray" : "border-primary"
+          } flex flex-row items-center justify-between border-2 rounded-lg border-primary`}
+        >
           <input
+            disabled={isShopListEmpty}
             type="text"
             placeholder="Enter a name"
             className="py-4 pl-3 text-xs focus:outline-none"
           />
-          <button className="px-4 py-4 text-sm font-bold text-white rounded-md rounded-r-sm bg-primary">
+          <button
+            disabled={isShopListEmpty}
+            className="px-4 py-4 text-sm font-bold text-white rounded-md rounded-r-sm disabled:bg-nice-gray bg-primary"
+          >
             Save
           </button>
         </div>

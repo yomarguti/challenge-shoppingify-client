@@ -20,6 +20,7 @@ module.exports = {
         "icons-gray": "#454545",
         "light-gray": "#828282",
         "dark-gray": "#34333A",
+        "nice-gray": "#C1C1C4",
         violet: "#80485B",
       },
       fontFamily: {
