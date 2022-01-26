@@ -23,12 +23,20 @@ export default function Sidebar(props: SidebarProps): JSX.Element {
     (!isMobile && activeComponent === null) ||
     activeComponent === ActiveSidebar.SHOPPING_LIST
   ) {
-    activeSidebar = <ShoppingList />;
+    activeSidebar = (
+      <aside className="w-full md:w-96">
+        <ShoppingList />
+      </aside>
+    );
   }
 
   if (activeComponent !== null) {
-    activeSidebar = sidebarComponents[activeComponent];
+    activeSidebar = (
+      <aside className="w-full md:w-96">
+        {sidebarComponents[activeComponent]}
+      </aside>
+    );
   }
 
-  return <aside className="w-full md:w-96">{activeSidebar}</aside>;
+  return activeSidebar;
 }

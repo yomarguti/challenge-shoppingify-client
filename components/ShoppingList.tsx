@@ -29,6 +29,8 @@ const ShoppingList = (): JSX.Element => {
     setActiveButton(itemId);
   };
 
+  const isShopListEmpty = shoppingList.length === 0;
+
   return (
     <div
       onClick={() => handleActiveButton(null)}
@@ -51,29 +53,38 @@ const ShoppingList = (): JSX.Element => {
         </div>
       </div>
 
-      <div className="flex-1 px-5 pt-6 pb-16 overflow-y-auto">
-        <div className="flex flex-row justify-between">
-          <h4 className="text-xl font-bold">Shopping list</h4>
-          <span className="text-lg material-icons">edit</span>
-        </div>
-        <div>
-          {shoppingList.length === 0 ? (
-            <h1>Empty list</h1>
-          ) : (
-            Object.keys(itemListByCategories).map((categoryLabel) => {
-              const items = itemListByCategories[categoryLabel];
-              return (
-                <Category
-                  name={categoryLabel}
-                  items={items}
-                  key={categoryLabel}
-                  activeButton={activeButton}
-                  onActiveButton={handleActiveButton}
-                />
-              );
-            })
-          )}
-        </div>
+      <div
+        className={`${
+          isShopListEmpty && "justify-end"
+        } flex flex-col flex-1 px-5 pt-6 pb-16 overflow-y-auto`}
+      >
+        {isShopListEmpty ? (
+          <>
+            <p className="grid flex-1 place-items-center">No items</p>
+            <div className="z-10 -mb-1 w-full h-32 bg-contain bg-center bg-no-repeat bg-[url('/undraw_shopping_app_flsj1.svg')]"></div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-row justify-between">
+              <h4 className="text-xl font-bold">Shopping list</h4>
+              <span className="text-lg material-icons">edit</span>
+            </div>
+            <div>
+              {Object.keys(itemListByCategories).map((categoryLabel) => {
+                const items = itemListByCategories[categoryLabel];
+                return (
+                  <Category
+                    name={categoryLabel}
+                    items={items}
+                    key={categoryLabel}
+                    activeButton={activeButton}
+                    onActiveButton={handleActiveButton}
+                  />
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 px-5 py-4 bg-white">
