@@ -8,6 +8,9 @@ export enum Actions {
   SetIsMobile = "SET_IS_MOBILE",
   DismissAll = "DISMISS_ALL",
   AddToShoppingList = "ADD_TO_SHOPPING_LIST",
+  RemoveFromShoppingList = "REMOVE_FROM_SHOPPING_LIST",
+  IncreaseQuantityInShoppingList = "INCREASE_QUANTITY_IN_SHOPPING_LIST",
+  DecreaseQuantityInShoppingList = "DECREASE_QUANTITY_IN_SHOPPING_LIST",
 }
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -64,6 +67,9 @@ export const sidebarReducer = (
 
 type ShoppingListPayload = {
   [Actions.AddToShoppingList]: Item;
+  [Actions.RemoveFromShoppingList]: number;
+  [Actions.DecreaseQuantityInShoppingList]: number;
+  [Actions.IncreaseQuantityInShoppingList]: number;
 };
 
 export type ShoppingListActions =
@@ -89,6 +95,25 @@ export const shoppingListReducer = (
 
       return [...state, { ...action.payload, pieces: 1 }];
     }
+    case Actions.RemoveFromShoppingList: {
+      return state.filter((listItem) => listItem.id !== action.payload);
+    }
+    case Actions.IncreaseQuantityInShoppingList: {
+      return state.map((listItem) => {
+        if (listItem.id !== action.payload) return listItem;
+        return { ...listItem, pieces: listItem.pieces + 1 };
+      });
+    }
+    case Actions.DecreaseQuantityInShoppingList: {
+      return state.map((listItem) => {
+        if (listItem.id !== action.payload) return listItem;
+        return {
+          ...listItem,
+          pieces: listItem.pieces === 1 ? 1 : listItem.pieces - 1,
+        };
+      });
+    }
+
     default:
       return state;
   }

@@ -5,8 +5,8 @@ export interface Item {
   image?: string;
   categoryId: number;
   categoryName: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ShoplistItem extends Item {

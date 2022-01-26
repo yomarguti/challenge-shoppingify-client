@@ -1,67 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Item, ShoplistItem } from "../app";
 import { AppContext } from "../context/context";
 import { Actions } from "../context/reducers";
-
-const dummyShList = [
-  {
-    id: 1,
-    name: "Fruit and vegetables",
-    items: [
-      {
-        id: 1,
-        title: "Avocado",
-        quantity: 3,
-      },
-      {
-        id: 2,
-        title: "Pre-cooked corn 450g",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Meat and fish",
-    items: [
-      {
-        id: 3,
-        title: "Chiken 1kg",
-        quantity: 3,
-      },
-      {
-        id: 4,
-        title: "Pork fillets 450g",
-        quantity: 1,
-      },
-      {
-        id: 5,
-        title: "Salmon 1kg",
-        quantity: 1,
-      },
-      {
-        id: 6,
-        title: "Chiken leg box",
-        quantity: 1,
-      },
-    ],
-  },
-];
-
-interface ItemInShoppingList extends Partial<Item> {
-  id: number;
-  title: string;
-  quantity: number;
-}
+import ShoppingListElement from "./ShoppingListElement";
 
 interface CategoryProps {
   name: string;
   items: ShoplistItem[];
-}
-
-interface ItemElementProps {
-  title: string;
-  quantity: number;
+  activeButton: number | null;
+  onActiveButton: (itemId: number | null) => void;
 }
 
 const ShoppingList = (): JSX.Element => {
@@ -70,14 +17,23 @@ const ShoppingList = (): JSX.Element => {
     state: { shoppingList },
   } = useContext(AppContext);
 
+  const [activeButton, setActiveButton] = useState<number | null>(null);
+
   const itemListByCategories = shoppingList.reduce((acc, current) => {
     const value = current["categoryName"];
     acc[value] = (acc[value] || []).concat(current);
     return acc;
   }, {} as Record<string, ShoplistItem[]>);
 
+  const handleActiveButton = (itemId: number | null): void => {
+    setActiveButton(itemId);
+  };
+
   return (
-    <div className="relative flex flex-col w-full h-full py-5 bg-primary-light">
+    <div
+      onClick={() => handleActiveButton(null)}
+      className="relative flex flex-col w-full h-full py-5 bg-primary-light"
+    >
       <div className="relative flex flex-row justify-end px-2 py-3 mx-5 rounded-2xl bg-violet">
         <div className="absolute -top-3 left-3 w-14">
           <img src="/source.svg" alt="Bottle" />
@@ -111,6 +67,8 @@ const ShoppingList = (): JSX.Element => {
                   name={categoryLabel}
                   items={items}
                   key={categoryLabel}
+                  activeButton={activeButton}
+                  onActiveButton={handleActiveButton}
                 />
               );
             })
@@ -134,27 +92,28 @@ const ShoppingList = (): JSX.Element => {
   );
 };
 
-const Category = ({ name, items }: CategoryProps) => {
+const Category = ({
+  name,
+  items,
+  activeButton,
+  onActiveButton,
+}: CategoryProps) => {
   return (
     <div className="flex flex-col pt-6">
       <h5 className="text-sm text-light-gray">{name}</h5>
       <ul>
         {items.map(({ id, name, pieces }) => (
-          <ItemElement title={name} quantity={pieces} key={id} />
+          <ShoppingListElement
+            itemId={id}
+            title={name}
+            quantity={pieces}
+            key={id}
+            showControls={activeButton === id}
+            onActiveButton={onActiveButton}
+          />
         ))}
       </ul>
     </div>
-  );
-};
-
-const ItemElement = ({ title, quantity }: ItemElementProps) => {
-  return (
-    <li className="flex flex-row items-center justify-between py-2 pr-3 tracking-tight">
-      <p className="text-sm font-bold">{title}</p>
-      <span className="px-3 py-1 text-xs border-2 rounded-3xl text-primary border-primary">
-        {quantity} pcs
-      </span>
-    </li>
   );
 };
 
