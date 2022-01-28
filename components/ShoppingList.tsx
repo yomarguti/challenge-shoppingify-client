@@ -22,7 +22,7 @@ const ShoppingList = (): JSX.Element => {
   const [activeButton, setActiveButton] = useState<number | null>(null);
   const [shopListName, setShopListName] = useState("");
 
-  const itemListByCategories = shoppingList.reduce((acc, current) => {
+  const itemListByCategories = shoppingList.list.reduce((acc, current) => {
     const value = current["categoryName"];
     acc[value] = (acc[value] || []).concat(current);
     return acc;
@@ -36,7 +36,7 @@ const ShoppingList = (): JSX.Element => {
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
-    const items = shoppingList.map(({ id, pieces }) => ({
+    const items = shoppingList.list.map(({ id, pieces }) => ({
       itemId: id,
       pieces,
     }));
@@ -48,7 +48,7 @@ const ShoppingList = (): JSX.Element => {
     console.log("shopList: ", shopList);
   };
 
-  const isShopListEmpty = shoppingList.length === 0;
+  const isShopListEmpty = shoppingList.list.length === 0;
 
   return (
     <div

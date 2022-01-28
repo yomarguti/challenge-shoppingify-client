@@ -1,5 +1,5 @@
-import { Item, ShoplistItem } from "../app";
-import { ActiveSidebar, SidebarState } from "./context";
+import { Item } from "../app";
+import { ActiveSidebar, ShopList, SidebarState } from "./context";
 
 export enum Actions {
   ShowShoppingList = "SHOW_SHOPPING_LIST",
@@ -76,42 +76,47 @@ export type ShoppingListActions =
   ActionMap<ShoppingListPayload>[keyof ActionMap<ShoppingListPayload>];
 
 export const shoppingListReducer = (
-  state: ShoplistItem[],
+  state: ShopList,
   action: ShoppingListActions | SidebarActions
-): ShoplistItem[] => {
+): ShopList => {
   switch (action.type) {
     case Actions.AddToShoppingList: {
-      console.log(action.payload);
-      console.log(state);
-      const item = state.find((it) => it.id === action.payload.id);
+      const item = state.list.find((it) => it.id === action.payload.id);
       if (item) {
-        return state.map((it) => {
-          if (it.id !== action.payload.id) {
-            return it;
-          }
+        const list = state.list.map((it) => {
+          if (it.id !== action.payload.id) return it;
           return { ...it, pieces: it.pieces + 1 };
         });
+        return { ...state, list };
       }
 
-      return [...state, { ...action.payload, pieces: 1 }];
+      return {
+        ...state,
+        list: [...state.list, { ...action.payload, pieces: 1 }],
+      };
     }
     case Actions.RemoveFromShoppingList: {
-      return state.filter((listItem) => listItem.id !== action.payload);
+      return {
+        ...state,
+        list: state.list.filter((listItem) => listItem.id !== action.payload),
+      };
     }
     case Actions.IncreaseQuantityInShoppingList: {
-      return state.map((listItem) => {
+      const list = state.list.map((listItem) => {
         if (listItem.id !== action.payload) return listItem;
         return { ...listItem, pieces: listItem.pieces + 1 };
       });
+      return { ...state, list };
     }
     case Actions.DecreaseQuantityInShoppingList: {
-      return state.map((listItem) => {
+      const list = state.list.map((listItem) => {
         if (listItem.id !== action.payload) return listItem;
         return {
           ...listItem,
           pieces: listItem.pieces === 1 ? 1 : listItem.pieces - 1,
         };
       });
+      return { ...state, list };
     }
 
     default:
