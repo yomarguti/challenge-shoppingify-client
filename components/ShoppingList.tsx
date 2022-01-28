@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
-import { Item, ShoplistItem } from "../app";
+import { ShoplistItem } from "../app";
 import { AppContext } from "../context/context";
 import { Actions } from "../context/reducers";
 import ShoppingListElement from "./ShoppingListElement";
+import axios from "axios";
+import { BASE_URL } from "../constants";
 
 interface CategoryProps {
   name: string;
@@ -18,8 +20,9 @@ const ShoppingList = (): JSX.Element => {
   } = useContext(AppContext);
 
   const [activeButton, setActiveButton] = useState<number | null>(null);
+  const [shopListName, setShopListName] = useState("");
 
-  const itemListByCategories = shoppingList.reduce((acc, current) => {
+  const itemListByCategories = shoppingList.list.reduce((acc, current) => {
     const value = current["categoryName"];
     acc[value] = (acc[value] || []).concat(current);
     return acc;
@@ -29,7 +32,23 @@ const ShoppingList = (): JSX.Element => {
     setActiveButton(itemId);
   };
 
-  const isShopListEmpty = shoppingList.length === 0;
+  const handleSaveClick = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    const items = shoppingList.list.map(({ id, pieces }) => ({
+      itemId: id,
+      pieces,
+    }));
+    if (items.length === 0) return;
+    const shopList = await axios.post(`${BASE_URL}/shopping-list`, {
+      name: shopListName,
+      items,
+    });
+    console.log("shopList: ", shopList);
+  };
+
+  const isShopListEmpty = shoppingList.list.length === 0;
 
   return (
     <div
@@ -87,7 +106,10 @@ const ShoppingList = (): JSX.Element => {
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 px-5 py-4 bg-white">
+      <form
+        onSubmit={handleSaveClick}
+        className="absolute bottom-0 left-0 right-0 px-5 py-4 bg-white"
+      >
         <div
           className={`${
             isShopListEmpty ? "border-nice-gray" : "border-primary"
@@ -95,18 +117,22 @@ const ShoppingList = (): JSX.Element => {
         >
           <input
             disabled={isShopListEmpty}
+            value={shopListName}
             type="text"
+            required
             placeholder="Enter a name"
             className="py-4 pl-3 text-xs focus:outline-none"
+            onChange={(e) => setShopListName(e.target.value)}
           />
           <button
+            type="submit"
             disabled={isShopListEmpty}
             className="px-4 py-4 text-sm font-bold text-white rounded-md rounded-r-sm disabled:bg-nice-gray bg-primary"
           >
             Save
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

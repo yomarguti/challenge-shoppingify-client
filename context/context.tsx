@@ -13,9 +13,15 @@ export interface SidebarState {
   itemDetails: Item | null;
 }
 
+export interface ShopList {
+  id: number | null;
+  name: string;
+  list: ShoplistItem[];
+}
+
 export interface AppState {
   sidebarState: SidebarState;
-  shoppingList: ShoplistItem[];
+  shoppingList: ShopList;
 }
 
 export enum ActiveSidebar {
@@ -30,7 +36,11 @@ const initialState: AppState = {
     active: null,
     itemDetails: null,
   },
-  shoppingList: [],
+  shoppingList: {
+    id: null,
+    name: "",
+    list: [],
+  },
 };
 
 const AppContext = createContext<{

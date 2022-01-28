@@ -51,6 +51,14 @@ const Category = ({ name, items }: CategoryProps) => {
 
 const ItemElement = ({ itemData }: ItemElementProps) => {
   const { dispatch } = useContext(AppContext);
+
+  const handleAddShopListClick = (
+    e: React.MouseEvent<HTMLElement>,
+    item: Item
+  ) => {
+    e.stopPropagation();
+    dispatch({ type: Actions.AddToShoppingList, payload: item });
+  };
   return (
     <li
       onClick={() =>
@@ -59,7 +67,12 @@ const ItemElement = ({ itemData }: ItemElementProps) => {
       className="flex flex-row justify-between px-3 py-3 tracking-tight bg-white shadow-md cursor-pointer rounded-xl"
     >
       <p>{itemData.name}</p>
-      <span className="material-icons text-light-gray">add</span>
+      <span
+        onClick={(e) => handleAddShopListClick(e, { ...itemData })}
+        className="transition material-icons text-light-gray hover:scale-110"
+      >
+        add
+      </span>
     </li>
   );
 };
