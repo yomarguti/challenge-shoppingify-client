@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { ShoplistItem } from "../app";
-import { AppContext } from "../context/context";
+import { ShoplistItem, ShopListResponse } from "../app";
+import { AppContext, ShopList } from "../context/context";
 import { Actions } from "../context/reducers";
 import ShoppingListElement from "./ShoppingListElement";
 import axios from "axios";
@@ -41,11 +41,21 @@ const ShoppingList = (): JSX.Element => {
       pieces,
     }));
     if (items.length === 0) return;
-    const shopList = await axios.post(`${BASE_URL}/shopping-list`, {
-      name: shopListName,
-      items,
-    });
-    console.log("shopList: ", shopList);
+
+    try {
+      const respose = await axios.post(`${BASE_URL}/shopping-list`, {
+        name: shopListName,
+        items,
+      });
+
+      const shopList: ShopListResponse = respose.data;
+      dispatch({
+        type: Actions.UpdateShoppingList,
+        payload: { id: shopList.id, name: shopList.name },
+      });
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   const isShopListEmpty = shoppingList.list.length === 0;

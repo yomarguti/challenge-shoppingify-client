@@ -11,6 +11,7 @@ export enum Actions {
   RemoveFromShoppingList = "REMOVE_FROM_SHOPPING_LIST",
   IncreaseQuantityInShoppingList = "INCREASE_QUANTITY_IN_SHOPPING_LIST",
   DecreaseQuantityInShoppingList = "DECREASE_QUANTITY_IN_SHOPPING_LIST",
+  UpdateShoppingList = "UPDATE_SHOPPING_LIST",
 }
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -70,6 +71,7 @@ type ShoppingListPayload = {
   [Actions.RemoveFromShoppingList]: number;
   [Actions.DecreaseQuantityInShoppingList]: number;
   [Actions.IncreaseQuantityInShoppingList]: number;
+  [Actions.UpdateShoppingList]: { id: number; name: string };
 };
 
 export type ShoppingListActions =
@@ -118,7 +120,9 @@ export const shoppingListReducer = (
       });
       return { ...state, list };
     }
-
+    case Actions.UpdateShoppingList: {
+      return { ...state, id: action.payload.id, name: action.payload.name };
+    }
     default:
       return state;
   }

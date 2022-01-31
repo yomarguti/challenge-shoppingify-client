@@ -1,3 +1,5 @@
+import { ShopList } from "./context/context";
+
 export interface Item {
   id: number;
   name: string;
@@ -26,4 +28,8 @@ export interface CategoryWithItems extends Category {
 
 export interface CategoryWithShopItems extends Category {
   items: ShoplistItem[];
+}
+
+export interface ShopListResponse extends ShopList {
+  id: number;
 }
